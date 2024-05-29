@@ -8,7 +8,6 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/gin-gonic/gin"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"sync"
@@ -25,20 +24,17 @@ func RunPull(ctx *gin.Context) {
 
 func dockerImgPull() error {
 	ctx := context.Background()
-	Images := []string{
+	Images = []string{
 		"nginx:latest",
 		"redis:6",
 	}
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
-
 	if err != nil {
 		panic(err)
 	}
 
 	var wg sync.WaitGroup
-
 	for _, img := range Images {
-
 		wg.Add(1)
 		go func() error {
 			defer wg.Done()
@@ -47,8 +43,7 @@ func dockerImgPull() error {
 			defer pullResponse.Close()
 
 			if _, err := io.Copy(os.Stdout, pullResponse); err != nil {
-				fmt.Printf("Error pulling image: %v\n", err)
-				log.Fatalln(err)
+				return err
 			}
 
 			fmt.Println("image pull success")
