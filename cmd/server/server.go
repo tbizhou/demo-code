@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"github.com/demo-code/internal/app/server"
@@ -7,6 +7,6 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.GET("/img/pull", server.RunPull)
+	r.GET("/api/img/pull", server.RunPull)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

@@ -15,7 +15,7 @@ func dockerImgSave(cli *client.Client, ctx context.Context, imageName string) er
 		fmt.Printf("Error saving image: %v\n", err)
 		return err
 	}
-	fmt.Println("Starting img stream")
+	fmt.Println("Starting images stream")
 	reader := io.TeeReader(saveResponse, os.Stdout)
 
 	defer saveResponse.Close()

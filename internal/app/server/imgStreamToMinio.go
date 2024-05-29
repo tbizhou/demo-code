@@ -12,7 +12,7 @@ func ImgStreamToMinio(ctx context.Context, imageName string, reader io.Reader) e
 	fmt.Println("connect minio")
 	minioClient := config.MinioClient()
 	fmt.Sprintf(imageName)
-	uploadInfo, err := minioClient.PutObject(ctx, "img", "nginx_1.25.5.tar", reader, -1, minio.PutObjectOptions{
+	uploadInfo, err := minioClient.PutObject(ctx, "images", "nginx_1.25.5.tar", reader, -1, minio.PutObjectOptions{
 		ContentType: "application/x-tar",
 	})
 
