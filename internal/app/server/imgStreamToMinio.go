@@ -8,11 +8,11 @@ import (
 	"io"
 )
 
-func StreamImgToMinio(ctx context.Context, reader io.Reader) error {
-	fmt.Println("start cn minio")
-	minioclient := config.MinioClient()
-
-	uploadInfo, err := minioclient.PutObject(ctx, "img", "nginx_1.25.5.tar", reader, -1, minio.PutObjectOptions{
+func ImgStreamToMinio(ctx context.Context, imageName string, reader io.Reader) error {
+	fmt.Println("connect minio")
+	minioClient := config.MinioClient()
+	fmt.Sprintf(imageName)
+	uploadInfo, err := minioClient.PutObject(ctx, "img", "nginx_1.25.5.tar", reader, -1, minio.PutObjectOptions{
 		ContentType: "application/x-tar",
 	})
 
