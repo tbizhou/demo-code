@@ -25,8 +25,7 @@ func RunPull(ctx *gin.Context) {
 func dockerImgPull() error {
 	ctx := context.Background()
 	Images = []string{
-		"nginx:latest",
-		"redis:6",
+		"alpine:latest",
 	}
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
@@ -46,7 +45,7 @@ func dockerImgPull() error {
 				return err
 			}
 
-			fmt.Println("image pull success")
+			fmt.Printf("%s pull success\n", img)
 			if err := dockerImgSave(cli, ctx, img); err != nil {
 				return err
 			}
