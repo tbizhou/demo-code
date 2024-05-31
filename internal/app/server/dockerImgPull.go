@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/demo-code/internal/app/requestdata"
 	"github.com/demo-code/internal/utils"
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
@@ -11,29 +12,31 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	"time"
 )
 
-var Images []string
-
-func RunPull(ctx *gin.Context) {
-	if err := dockerImgPull(); err != nil {
-		utils.Response(ctx, http.StatusUnprocessableEntity, 400, nil, "上传错误")
+func RunPull(c *gin.Context) {
+	images := requestdata.BindImages(c)
+	if err := dockerImgPull(images); err != nil {
+		utils.Response(c, http.StatusUnprocessableEntity, 400, nil, "上传错误")
 		return
 	}
 }
 
-func dockerImgPull() error {
+func dockerImgPull(Images *requestdata.DockerPullImages) error {
 	ctx := context.Background()
-	Images = []string{
-		"alpine:latest",
-	}
+
+	time.Sleep(5 * time.Second)
+	fmt.Println("Images:", Images.Images)
+
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
 		panic(err)
 	}
 
 	var wg sync.WaitGroup
-	for _, img := range Images {
+	for _, img := range Images.Images {
+		fmt.Println("img:", img)
 		wg.Add(1)
 		go func() error {
 			defer wg.Done()
