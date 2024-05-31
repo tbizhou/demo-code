@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: imgpullserver
+  name: imgpullserver
+spec:
+  selector:
+    app: imgpullserver
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: imgpullserver
+  name: imgpullserver
+  labels:
+    app: imgpullserver
+spec:
+  selector:
+    matchLabels:
+      app: imgpullserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: imgpullserver
+    spec:
+      containers:
+        - name: imgpullserver
+          image: 10.10.10.11:80/tools/imgpullserver:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/run/docker.sock
+              subPath: docker.sock
+              name: docker-sock
+      imagePullSecrets:
+        - name: wesigin-registry
+
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
