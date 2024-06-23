@@ -1,0 +1,13 @@
+Minio:
+    # Minio 配置
+    endpoint: 10.10.10.12:9000
+    accessKey: sign-minio
+    secretKey: whoami?Minio@123
+    bucket: img
+    ssl: false
+Docker:
+    # Docker 配置
+    username: ansible
+    password: only_pull_!#@
+  #  username: t819088691
+  #  password: t12345678.

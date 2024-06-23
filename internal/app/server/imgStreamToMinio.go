@@ -3,15 +3,17 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/demo-code/internal/config"
 	"github.com/minio/minio-go/v7"
 	"io"
+	"operator-dev/docker-image-download/internal/config"
+	"strings"
 )
 
 func ImgStreamToMinio(ctx context.Context, imageName string, reader io.Reader) error {
 
 	minioClient := config.MinioClient()
-	imgtar := fmt.Sprintf(imageName + ".tar")
+	objimg := strings.Replace(imageName, ":", "_", -1)
+	imgtar := fmt.Sprintf(objimg + ".tar")
 	uploadInfo, err := minioClient.PutObject(ctx, "img", imgtar, reader, -1, minio.PutObjectOptions{
 		ContentType: "application/x-tar",
 	})
@@ -19,6 +21,6 @@ func ImgStreamToMinio(ctx context.Context, imageName string, reader io.Reader) e
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Successfully uploaded %s of size %d\n", uploadInfo.ETag, uploadInfo.Size)
+	fmt.Printf("Successfully uploaded %s of size %d\n", uploadInfo.Location, uploadInfo.Size)
 	return nil
 }
