@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: imgpullserver
-          image: 10.10.10.11:80/tools/imgpullserver:v1
+          image: 10.10.10.11:80/tools/imgpullserver:${tag}
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -40,11 +40,9 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /var/run/docker.sock
-              subPath: docker.sock
               name: docker-sock
       imagePullSecrets:
         - name: wesigin-registry
-
       volumes:
         - name: docker-sock
           hostPath:
